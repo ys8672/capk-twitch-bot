@@ -58,25 +58,22 @@ const unbanUserFromTTS = ({ channel, client, message, name, user }) => {
         return;
     }
 
-    if(isBroadcasterOrMod(user) && message.startsWith("!unban")){
+    if(message === commands.UNBAN  || message.split(" ").length !== 2){
+        client.say(channel, `TTS Ban Failed. Example: !unban @${name}`)
+    } else {
+        let input = message.split(' ');
 
-        if(message === commands.UNBAN  || message.split(" ").length !== 2){
-            client.say(channel, `TTS Ban Failed. Example: !unban @${name}`)
-        } else {
-            let input = message.split(' ');
+        if(input[1]) {
+            input = input[1].replace(/^@/, '');
+        }
 
-            if(input[1]) {
-                input = input[1].replace(/^@/, '');
-            }
-
-            if((savedData.ttsBanList).includes(input)){
-                savedData.ttsBanList = (savedData.ttsBanList).filter(e => e !== input);
-                save();
-                client.say(channel, `@${input} is unbanned from TTS!`);
-            }
-            else{
-                client.say(channel, `@${input} was not banned!`);
-            }
+        if((savedData.ttsBanList).includes(input)){
+            savedData.ttsBanList = (savedData.ttsBanList).filter(e => e !== input);
+            save();
+            client.say(channel, `@${input} is unbanned from TTS!`);
+        }
+        else{
+            client.say(channel, `@${input} was not banned!`);
         }
     }
 };
