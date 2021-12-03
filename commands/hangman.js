@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { commands } = require('../utils/constants');
 const { isBroadcasterOrMod, setCharAt } = require('../utils/index');
 const { save, savedData, updateSavedData } = require('../data/index');
 
@@ -25,8 +26,8 @@ let dictionaryWord = "";
 /* Current progress of Hangman word guess. */
 let word = "";
 
-const isGuess = message => (message.startsWith('!guess') && message.split(" ")[0] === "!guess");
-const isGuessWord = message => (message.startsWith('!guessword') && message.split(" ")[0] === "!guessword");
+const isGuess = message => (message.startsWith(commands.GUESS) && message.split(" ")[0] === commands.GUESS);
+const isGuessWord = message => (message.startsWith(commands.GUESS_WORD) && message.split(" ")[0] === commands.GUESS_WORD);
 
 /*
 	 * Command: !start
@@ -93,7 +94,7 @@ const guessLetter = ({ channel, client, message, name }) => {
         client.say(channel, `@${name} You are on letter cooldown for ${Math.round((letterCooldown[name] - Date.now())/1000)} seconds!`);
     }  else if (strArray.length !== 2 || strArray[1].length !== 1 || !((/[a-zA-Z]/).test(strArray[1]))) {
         // Invalid guess.
-        client.say(channel, `@${name} Invalid "!guess <letter>" usage. Guess one letter. Example: "!guess a"`);
+        client.say(channel, `@${name} Invalid "${commands.GUESS} <letter>" usage. Guess one letter. Example: "${commands.GUESS} a"`);
     } else if (letterGuess.includes(strArray[1].toUpperCase())) {
         // Letter has already been guessed.
         client.say(channel, `@${name} "${strArray[1].toUpperCase()}" has been guessed. Guessed: ${letterGuess.join(', ')}.`);
@@ -166,7 +167,7 @@ const guessWord = ({ channel, client, message, name }) => {
         client.say(channel, `@${name} You are on word cooldown for ${Math.round((wordCooldown[name] - Date.now())/1000)} seconds!`);
     }  else if (strArray.length !== 2) {
         //Invalid guess
-        client.say(channel, `Invalid "!guessword <word>" usage. Guess a word. Example: "!guessword salmon"`);
+        client.say(channel, `Invalid "${commands.GUESS_WORD} <word>" usage. Guess a word. Example: "${commands.GUESS_WORD} salmon"`);
     } else {
         // Add word cooldown.
         if(wordCooldown[name]) {

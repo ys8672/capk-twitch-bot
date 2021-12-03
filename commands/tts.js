@@ -1,4 +1,5 @@
 const say = require('say');
+const { commands } = require('../utils/constants');
 const { isBroadcasterOrMod, isSubOrVIP } = require('../utils/index');
 const { savedData } = require('../data/index');
 
@@ -126,7 +127,7 @@ function tts({ channel, client, message, name, user }){
         banned: `@${name} You are banned from using TTS.`,
         instructions: [
                 `@${name} Add a message after typing the !tts command to have a text-to-speech reader read your message.`,
-                'Example: !tts Hello World!'
+                `Example: ${commands.TTS} Hello World!`
             ].join(' '),
         off: `@${name} Text to speech is off.`,
         subOrVip: `@${name} Only subs and VIPs can use TTS.`,

@@ -2,8 +2,8 @@ const { isBroadcasterOrMod } = require('../utils/index.js');
 const { commands } = require('../utils/constants');
 const { save, savedData } = require('../data/index');
 
-const isBan = message => message.startsWith("!ban");
-const isUnban = message => message.startsWith("!unban");
+const isBan = message => message.startsWith(commands.BAN);
+const isUnban = message => message.startsWith(commands.UNBAN);
 
 /**
  * Command: !ban
@@ -22,7 +22,7 @@ const banUserFromTTS = ({ channel, client, message, name, user }) => {
     }
 
     if(message === commands.BAN || message.split(" ").length !== 2){
-        client.say(channel, `TTS Ban Failed. Example: !ban @${name}`)
+        client.say(channel, `TTS Ban Failed. Example: ${commands.BAN} @${name}`)
     } else {
         //Get user to ban in input variable, get rid of @ if there
         let input = message.split(' ');
@@ -59,7 +59,7 @@ const unbanUserFromTTS = ({ channel, client, message, name, user }) => {
     }
 
     if(message === commands.UNBAN  || message.split(" ").length !== 2){
-        client.say(channel, `TTS Ban Failed. Example: !unban @${name}`)
+        client.say(channel, `TTS Ban Failed. Example: ${commands.UNBAN} @${name}`)
     } else {
         let input = message.split(' ');
 
