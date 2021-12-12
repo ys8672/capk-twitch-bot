@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { commands } = require('../utils/constants');
 const { isBroadcasterOrMod, setCharAt } = require('../utils/index');
-const { save, savedData, updateSavedData } = require('../data/index');
+const { getSavedData, updateSavedData } = require('../data/index');
 
 // HANGMAN VARIABLES
 /* String list of all the words the Hangman bot can choose from.
@@ -123,12 +123,12 @@ const guessLetter = ({ channel, client, message, name }) => {
             // Correct guess.
             if(dictionaryWord === word) {
                 // Winner, so upload stats and announce win.
-                savedData.wins++;
-                savedData.total++;
-                savedData.leaderboard[name] = (savedData.leaderboard[name]+1) || 1 ;
-                save();
+                getSavedData().wins++;
+                getSavedData().total++;
+                getSavedData().leaderboard[name] = (getSavedData().leaderboard[name]+1) || 1 ;
+                updateSavedData(getSavedData());
                 started = false;
-                client.say(channel, `@${name} You win! Word is "${dictionaryWord}". ${savedData.wins}/${savedData.total} wins.`);
+                client.say(channel, `@${name} You win! Word is "${dictionaryWord}". ${getSavedData().wins}/${getSavedData().total} wins.`);
             } else {
                 //Correct, but more letters to be guessed.
                 client.say(channel, `@${name} ${times} "${charGuess}". Lives: ${lives}. Guessed: ${letterGuess.join(', ')}. Progress: ${word}.`);
@@ -140,10 +140,10 @@ const guessLetter = ({ channel, client, message, name }) => {
 
             if(lives === 0){
                 // Game over
-                savedData.total++;
-                save();
+                getSavedData().total++;
+                updateSavedData(getSavedData());
                 started = false;
-                client.say(channel, `@${name} GAME OVER. No "${charGuess}". Guessed: ${letterGuess.join(', ')}. Final progress: ${word}. Actual Word: "${dictionaryWord}". ${savedData.wins}/${savedData.total} wins.`);
+                client.say(channel, `@${name} GAME OVER. No "${charGuess}". Guessed: ${letterGuess.join(', ')}. Final progress: ${word}. Actual Word: "${dictionaryWord}". ${getSavedData().wins}/${getSavedData().total} wins.`);
             } else {
                 // Incorrect, but there are still lives remaining.
                 client.say(channel, `@${name} No "${charGuess}". Lives: ${lives}. Guessed: ${letterGuess.join(', ')}. Progress: ${word}.`);
@@ -178,23 +178,23 @@ const guessWord = ({ channel, client, message, name }) => {
         let wordGuess = strArray[1].toUpperCase();
         if(dictionaryWord === wordGuess){
             // Correct word guess, so game is recorded.
-            savedData.wins++;
-            savedData.total++;
-            savedData.leaderboard[name] = (savedData.leaderboard[name]+1) || 1 ;
-            save();
+            getSavedData().wins++;
+            getSavedData().total++;
+            getSavedData().leaderboard[name] = (getSavedData().leaderboard[name]+1) || 1 ;
+            updateSavedData();
             started = false;
-            client.say(channel, `@${name} You win! Word is "${dictionaryWord}". ${savedData.wins}/${savedData.total} wins!`);
+            client.say(channel, `@${name} You win! Word is "${dictionaryWord}". ${getSavedData().wins}/${getSavedData().total} wins!`);
         } else {
             // Word guess was incorrect.
             lives--;
 
             if(lives === 0){
                 // Game over.
-                savedData.total++;
-                save();
+                getSavedData().total++;
+                updateSavedData(getSavedData());
 
                 started = false;
-                client.say(channel, `@${name} GAME OVER. No "${wordGuess}". Guessed: ${letterGuess.join(', ')}. Final progress: ${word}. Actual word: "${dictionaryWord}". ${savedData.wins}/${savedData.total} wins`);
+                client.say(channel, `@${name} GAME OVER. No "${wordGuess}". Guessed: ${letterGuess.join(', ')}. Final progress: ${word}. Actual word: "${dictionaryWord}". ${getSavedData().wins}/${getSavedData().total} wins`);
             } else {
                 // More lives, so game not over yet but incorrect word guess.
                 client.say(channel, `@${name} No "${wordGuess}". Lives: ${lives}. Guessed: ${letterGuess.join(', ')}. Progress: ${word}.`);
@@ -210,8 +210,8 @@ const leaderBoard = ({ channel, client }) => {
 	 * Get the top 10 players on the Hangman leaderboard.
 	 */
     let result = Object
-        .keys(savedData.leaderboard)
-        .map(key => ({id: String(key), val: savedData.leaderboard[key]}));
+        .keys(getSavedData().leaderboard)
+        .map(key => ({id: String(key), val: getSavedData().leaderboard[key]}));
 
     let masterList = result.sort(function (a, b) {
         return b.val - a.val;
@@ -238,8 +238,8 @@ const stats = ({ channel, client, name }) => {
 	 * Find out your own stats on the Hangman leaderboard.
 	 */
     let val = 0;
-    if(name in savedData.leaderboard){
-        val = savedData.leaderboard[name];
+    if(name in getSavedData().leaderboard){
+        val = getSavedData().leaderboard[name];
     }
     client.say(channel, `@${name} has won ${val} Hangman games!`);
 };

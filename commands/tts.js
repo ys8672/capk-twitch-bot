@@ -1,7 +1,7 @@
 const say = require('say');
 const { commands } = require('../utils/constants');
 const { isBroadcasterOrMod, isSubOrVIP } = require('../utils/index');
-const { savedData } = require('../data/index');
+const { getSavedData } = require('../data/index');
 
 // TEXT-TO-SPEECH VARIABLES
 /* Speed the text-to-speech reads the message. 1.0 is normal, 0.5 is half
@@ -29,7 +29,8 @@ const ttsQueue = [];
  * all messages have been read out loud.
  */
 function ttsReader(){
-    say.speak(ttsQueue.shift(), null, ttsSpeed, (err) => {
+    say.speak(ttsQueue[0], null, ttsSpeed, (err) => {
+        ttsQueue.shift()
         if(ttsQueue.length > 0){
             ttsReader();
         }
@@ -134,15 +135,13 @@ function tts({ channel, client, message, name, user }){
 
     };
 
-    console.log(name);
-    console.log(JSON.stringify(savedData))
     if(message === "!tts"){
         // No message, so instructions on how to use.
         client.say(channel, messages.instructions);
     } else if(!ttsOn) {
         // TTS is off so a message is said to tell that.
         client.say(channel, messages.off)
-    } else if((savedData.ttsBanList).includes(name)) {
+    } else if((getSavedData().ttsBanList).includes(name)) {
         // Banned people not allowed.
         client.say(channel, messages.banned);
     } else if(!(isBroadcasterOrMod(user) || isSubOrVIP(user))) {

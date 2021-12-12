@@ -1,6 +1,6 @@
 const { isBroadcasterOrMod } = require('../utils/index.js');
 const { commands } = require('../utils/constants');
-const { save, savedData } = require('../data/index');
+const { save, getSavedData, updateSavedData } = require('../data/index');
 
 const isBan = message => message.startsWith(commands.BAN);
 const isUnban = message => message.startsWith(commands.UNBAN);
@@ -31,12 +31,12 @@ const banUserFromTTS = ({ channel, client, message, name, user }) => {
             input = input[1].replace(/^@/, '');
         }
 
-        if((savedData.ttsBanList).includes(input)){
+        if((getSavedData().ttsBanList).includes(input)){
             client.say(channel, `@${input} is already banned!`);
         }
         else{
-            (savedData.ttsBanList).push(input);
-            save();
+            (getSavedData().ttsBanList).push(input);
+            updateSavedData(getSavedData())
             client.say(channel, `@${input} is now banned from TTS!`);
         }
     }
@@ -67,9 +67,9 @@ const unbanUserFromTTS = ({ channel, client, message, name, user }) => {
             input = input[1].replace(/^@/, '');
         }
 
-        if((savedData.ttsBanList).includes(input)){
-            savedData.ttsBanList = (savedData.ttsBanList).filter(e => e !== input);
-            save();
+        if((getSavedData().ttsBanList).includes(input)){
+            getSavedData().ttsBanList = (getSavedData().ttsBanList).filter(e => e !== input);
+            updateSavedData(getSavedData());
             client.say(channel, `@${input} is unbanned from TTS!`);
         }
         else{

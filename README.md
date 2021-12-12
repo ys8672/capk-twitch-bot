@@ -46,7 +46,7 @@ There may be more features added in the future, so make sure to keep an eye out 
          },
          identity: {
              username: 'CapKTwitchBot',
-             password: 'oauth:s2uehd9dcbaos03u1nhd812',
+             password: 'oauth:whatevertherandomgibberishcharactershere',
          },
          channels: ['CapK999'],
      };
@@ -105,13 +105,14 @@ However, there are some differences for Hangman for my bot.
 
 Possible words will be stored in the dictionary.txt file. Each line in the text file will be one of the many possible words the bot will random choose.  
 
-**WARNING:** IF YOU PLAN ON CHANGING THE dictionary.txt FILE TO WHATEVER WORDS YOU WANT, MAKE SURE YOU ONLY USE LETTERS FROM A-Z ONLY. DO NOT USE WORDS WITH SPACES, SPECIAL CHARACTERS, NUMBERS, SYMBOLS, OTHER LANGUAGE ALPHABETS, ETC! GUESSING LETTERS WILL ONLY WORK FOR LETTERS BETWEEN A-Z AND IF THE BOT PICKS A WORD WITH THESE SPECIAL CHARACTERISTICS, THE WORD WILL NEVER BE CORRECTLY GUESSED LEGITIMATELY. YOU HAVE BEEN WARNED! 
+**WARNING:** IF YOU PLAN ON CHANGING THE dictionary.txt FILE TO WHATEVER WORDS YOU WANT, MAKE SURE YOU ONLY USE LETTERS FROM A-Z ONLY. DO NOT USE WORDS WITH SPACES, SPECIAL CHARACTERS, NUMBERS, SYMBOLS, OTHER LANGUAGE ALPHABETS, ETC! GUESSING LETTERS WILL ONLY WORK FOR LETTERS BETWEEN A-Z AND IF THE BOT PICKS A WORD WITH THESE SPECIAL CHARACTERISTICS, THE WORD WILL NEVER BE CORRECTLY GUESSED LEGITIMATELY. YOU HAVE BEEN WARNED!  
+**TL:DR**- Only use word with letters from a-z.
 
 **OK:** salmon, computer, develop, destination 
 
 **NOT OK:** l0ve, pre-date, Mädchen, ke$ha, 爱 , 🤑, компьютер  
 
-TL:DR- Only use letters from a-z.
+
 
 **Commands:**
 - `!start` Starts a new Hangman game! Only available to the broadcaster and moderators. Cannot be used if a game is already in progress. If a game has not been started, guessing will do nothing.
@@ -123,18 +124,23 @@ TL:DR- Only use letters from a-z.
 - `!stats` Tells the person using the command how many Hangman wins they have.
 - `!leaderboard` Gives the current top 10 players of Hangman, sorted from top to bottom by the number of wins.
 
+## Miscellaneous
+
+- The file `saved-data.json` inside the data folder contains a list of saved information. **DO NOT ALTER THIS FILE! DOING SO CAN CORRUPT THE BOT!**
+- The `dictionary.txt` contains all the possible word for the Hangman that the bot chooses from random. I found a random text file of all the words online from [here](https://github.com/hugsy/stuff/blob/main/random-word/english-nouns.txt). However, you are welcome to replace it with words of your choice. 
+
 ## Versions
 
-#### Version 1.0.0 (December 25, 2021):
+#### Version 1.0.0:
 - Official release: This repository is made public. 
 
 ## Frequently Asked Questions
 
-**Question:** I want to change a certain minor features of the bot (like changing the number of lives in Hangman to 3 lives instead of 6). How do I do that?
+**Question: I want to change a certain minor features of the bot (like changing the number of lives in Hangman to 3 lives instead of 6). How do I do that?**
 
 **Answer:** If you are confident in your programming abilities, you can manually look at the code and change it manually. There are comments that that signify what all the variables and functions do. However, if you have zero clue how to code, you can contact me and I will be happen to make some minor adjustments to your code to fit your wishes.  
 
-**Question:** The Text-to-Speech cannot read certain non alphanumeric characters, like German umlauts, Japanese characters, etc. How can I fix this?
+**Question: The Text-to-Speech cannot read certain non alphanumeric characters, like German umlauts, Japanese characters, etc. How can I fix this?**
 
 **Answer:** The text-to-speech by default only supports unicode. However, if you want to be able to read things like German umlauts or emojis or anything UTF8 compatible, you can follow the steps below:  
 
@@ -148,17 +154,29 @@ TL:DR- Only use letters from a-z.
 
 Unfortunately, this fix does not support non-Latin letter languages like Chinese, Russian, etc.
 
+**Question: I see many other features on your Twitch Bot when you stream that do not exist here. Where are those?**
+
+**Answer:** This repository is just what I feel like are the most important features of my bot. Some features do not make sense to bring over here (like an inside joke where it tells how late one of my viewers are to my stream but would not make sense on other streams). Others features could just be in testing on my stream before I make it available here. I either will or will not make these features on this repository sooner or later depending on how I feel about it. 
+
+**Question: I am trying to cheat... I mean get help when you start a Hangman game, but the dictionary.txt file does not have that word. Where am I getting my words on my stream?**
+
+**Answer:** It's a secret to everybody! I simply found a random text file of words online to act as a sample dictionary.txt file for my example. The real word file will most likely never be revealed.
+
 ## Future Plans
+
+This is a list of things I hope to implement on my Twitch Bot in the future. I do not have a date these will be available, nor can I guarantee any of these will be made. Please do not overhype these possible new features.
 
 1. Hard Hangman difficulty.
 2. Speed for text-to-speech.
 3. Another game, maybe Battleship? 
 4. TTS for other languages?
-5. Log file for TTS
+5. Log file for TTS.
+6. Hangman and TTS integration.
+7. TTS/Hangman other languages support.
 
 ## Contact Me
 
-If you have any questions, you can either talk to me when I am live on [Twitch](https://www.twitch.tv/capk999). You can also contact me via Discord The easiest way to find me is probably to join the [Salmon Run Discord server](https://discord.com/invite/EY3JZqk) and message someone named CapK#5880. 
+If you have any questions/feedback/complaints/praise/love notes/literally anything you want to tell me, you can either talk to me when I am live on [Twitch](https://www.twitch.tv/capk999). You can also contact me via Discord The easiest way to find me is probably to join the [Salmon Run Discord server](https://discord.com/invite/EY3JZqk) and message someone named CapK#5880. 
 
 
 ## Authors and Acknowledgement
