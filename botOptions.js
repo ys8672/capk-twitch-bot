@@ -15,8 +15,8 @@ const options = {
         reconnect: true,
     },
     identity: {
-        username: 'USERNAME-HERE'
-        password: 'oauth:PASSWORD-HERE'
+        username: 'USERNAME-HERE',
+        password: 'oauth:PASSWORD-HERE',
     },
     channels: ['CHANNEL-HERE'],
 };
