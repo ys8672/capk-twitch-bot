@@ -11,7 +11,7 @@ const isLurking = (name) => (name in lurkers);
 	 * is beginning to lurk in chat.
 	 */
 const lurk = ({channel, client, name}) => {
-    if(isLurking){
+    if(isLurking(name)){
         client.say(channel, `@${name} is already lurking!`);
     } else {
         lurkers[name] = Date.now();
@@ -27,7 +27,7 @@ const showLurkDuration = ({channel, client, name}) => {
     if(isLurking(name)){
         const difference = Date.now() - lurkers[name];
         delete lurkers[name];
-        client.say(channel, `@${name} lurked for ${parseTime(difference)} + ".`);
+        client.say(channel, `@${name} lurked for ${parseTime(difference)}.`);
     }
 };
 

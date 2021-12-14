@@ -11,7 +11,7 @@ exports.client = new tmi.client(options);
  */
 exports.isBroadcasterOrMod = (user) => {
     return 'broadcaster' in user.badges
-        || (isRealValue(user["mod"]) && (user["mod"] === true));
+        || 'moderator' in user.badges;
 };
 
 /*

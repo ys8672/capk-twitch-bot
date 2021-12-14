@@ -28,6 +28,7 @@ const hangman = require('./commands/hangman');
 const {
 	banUserFromTTS,
 	isBan,
+	isUnban,
 	unbanUserFromTTS
 } = require('./commands/ban');
 
@@ -199,23 +200,31 @@ client.on('connected', (address, port) => {
  * @param self Data about the Twitch Bot itself.
  */
 client.on('chat', (channel, user, message, self) => {
-	// Do not have bot read itself or non-commands.
-	if(self || !message.startsWith('!')) return;
-
 	// Simple username variable.
 	const name = user["display-name"];
 
 	// Shared Props
 	const sharedProps = { channel, client };
 
+	// Lurk Props
+	const lurkProps = { ...sharedProps, name };
+
+	// Lurk needs to be before the self/command check. 
+	if(message === commands.LURK) {
+		lurk(lurkProps);
+	} else {
+		/* Show time lurking, if chatter is lurking */
+		showLurkDuration(lurkProps);
+	}
+
+	// Do not have bot read itself or non-commands.
+	if(self || !message.startsWith('!')) return;
+
 	// Ban props
 	const banProps = { ...sharedProps, message, name, user };
 
 	// Hangman Props
 	const hangmanProps = { ...sharedProps, name, user };
-
-	// Lurk Props
-	const lurkProps = { ...sharedProps, name };
 
 	// TTS Props
 	const ttsProps = { ...sharedProps, user }
@@ -228,7 +237,6 @@ client.on('chat', (channel, user, message, self) => {
 		[commands.GUESS]: () => hangman.guessLetter({ ...hangmanProps, message }),
 		[commands.GUESS_WORD]: () => hangman.guessWord({ ...hangmanProps, message }),
 		[commands.LEADERBOARD]: () => hangman.leaderBoard(hangmanProps),
-		[commands.LURK]: () => lurk(lurkProps),
 		[commands.OFF]: () => disableTTS(ttsProps),
 		[commands.ON]: () => enableTTS(ttsProps),
 		[commands.SKIP]: () => skipTTS({ user }),
@@ -238,14 +246,16 @@ client.on('chat', (channel, user, message, self) => {
 		[commands.UNBAN]: () => unbanUserFromTTS(banProps),
 	};
 
-	/* Show time lurking, if chatter is lurking */
-	showLurkDuration(lurkProps);
+
 
 	/* Execute specific !command */
 	let command;
 	switch(true){
 		case (isBan(message)):
 			command = '!ban';
+			break;
+		case (isUnban(message)):
+			command = '!unban';
 			break;
 		case (hangman.isGuess(message)):
 			command = '!guess';

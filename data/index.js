@@ -33,22 +33,18 @@ const updateSavedData = (newData, replace = false) => {
             ...newData
         };
     }
+    
+    /*
+     * Saves the savedData object into a text file to load up next time.
+     */
+    fs.writeFileSync(dataPath, JSON.stringify(savedData));
 };
 
-/*
- * Saves the savedData object into a text file to load up next time.
- */
-function save() {
-    fs.writeFile('saved-data.json', JSON.stringify(savedData), (err) => {
-        if (err){
-            console.log("saved-data.json save failed.");
-        }
-    });
-}
+const getSavedData = () => savedData;
 
 module.exports = {
     dataPath,
-    save,
     savedData,
-    updateSavedData
+    updateSavedData,
+    getSavedData
 };
