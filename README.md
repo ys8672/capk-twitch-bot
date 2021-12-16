@@ -25,14 +25,16 @@ There may be more features added in the future, so make sure to keep an eye out 
 5. Once you are inside your Twitch Bot inside your command prompt, type the following and press enter:
    - `npm install node.js`
    - `npm install say.js`
-6. Clone this repository. To do so, just type `git clone https://github.com/ys8672/capk-twitch-bot.git` in your terminal/command prompt and press enter.
+6. Get the contents of this repository into your TwitchBot folder. 
+   - **For git users/programmers:** This only works if you have `git` already installed on your computer. If you would like to install git, [click here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git). To do so, just type `git clone https://github.com/ys8672/capk-twitch-bot.git` in your terminal/command prompt and press enter. Of course, as a programmer, I will assume you know the commands afterwards to actually get into the folder of content, so make sure to do some `cd capk-twitch-bot-main` if you need to until you actually get to a folder with the contents as listed above. If you get to a folder that has `bot.js`, you are there! However, in later parts of the steps, I will assume all the files on this repository will be in the `TwitchBot` folder to simplify the steps for non-programmers, so please make adjustments accordingly. 
+   - **For non-git/non-programmers users:** You can always just click on the green button on this page named `CODE` and click `DOWNLOAD ZIP`. After the download is finished, unzip the file inside your TwitchBot folder. Of course, it is entire possible everything will be inside a new folder like `capk-twitch-bot-main`. In that case, I want you to keep going into these folders until you reach a folder containing 3 folders like `commands`, `data`, `util`, and some text files like `bot.js`, `botOptions.js`, `dictionary.txt`, and `README`. Move everything there into the TwitchBot folder. (Just CTRL + A -> CTRL + X and go back into folder TwitchBot and CTRL + V for the shortcut version!) You can just delete all the empty `capk-twitch-bot-main` folders afterwards. This step is just to reduce the number of unneeded folders. If done successfully, your TwitchBot folder should have 7 files: `commands`, `data`, `util`, `bot.js`, `botOptions.js`, `dictionary.txt`, and `README`.
 7. Decide whether your your bot to share your own Twitch channel or create a Twitch channel just for the bot. Once you have made up your mind, log onto Twitch using that account then go to [this website](https://twitchapps.com/tmi/) to get your an authentication token. Click `CONNECT` on that website. 
 **PLEASE NOTE: THE TOKEN IS THE PASSWORD THE BOT USES TO CONNECT TO TWITCH. TREAT IT AS A PASSWORD AND DO NOT GIVE IT TO ANYBODY!**
 8. Open up the file `botOptions.js`. If you can't open it, open up Notepad or any word editor and open the file from there. 
 9. Inside the file, replace three lines:
-      1. Change `username: 'USERNAME-HERE'` to the username of your Twitch Bot, case      sensitive. In my case, it would be `username: 'CapKTwitchBot'`
-      2. Change `password: 'oauth:PASSWORD-HERE'` to the key you have gotten from that website in step 7. PASSWORD-HERE should be some random gibberish of alphanumeric characters. Keep the `oauth:` part at the beginning.
-      3. Change `channels: ['CHANNEL-HERE']` to the Twitch channel(s) you want the bot to work on, case sensitive. In my case, it would be `channels: ['CapK999']`.
+      1. Change line `username: 'USERNAME-HERE',` to the username of your Twitch Bot, case      sensitive. In my case, it would be `username: 'CapKTwitchBot',`
+      2. Change line `password: 'oauth:PASSWORD-HERE',` to the key you have gotten from that website in step 7. PASSWORD-HERE should be some random gibberish of alphanumeric characters. Keep the `oauth:` part at the beginning.
+      3. Change line `channels: ['CHANNEL-HERE'],` to the Twitch channel(s) you want the bot to work on, case sensitive. In my case, it would be `channels: ['CapK999'],`.
 
    In the end, it should look something like this:
       ```javascript
@@ -60,7 +62,9 @@ Use the [official Twitch guide](https://dev.twitch.tv/docs/irc) to learn more ab
 
 ## Usage
 
-If you have just followed the installation part of this README, you should have the bot working by step 12. However, if you close the bot, shut down your computer, and want to open the bot again from a blank slate, here are the steps:
+If you have just followed the installation part of this README, you should have the bot working by step 12. The unfortunate thing about using this bot locally is that you have to manually turn it on and off every time for it to work instead of a bot working 24/7 on your channel. Turn on the bot when you want to use it, and turn it off when you are done with it. 
+
+If you close the bot, shut down your computer, and want to open the bot again from a blank slate, here are the steps:
 
 1. Assuming all the file are in TwitchBot folder in your Desktop as the Installation steps above, open your Command Line (cmd) and type `cd Desktop/TwitchBot` and press enter.
 2. Type `node bot.js` in your command line and prses enter to start the bot.
@@ -126,15 +130,19 @@ Possible words will be stored in the dictionary.txt file. Each line in the text 
 
 ## Miscellaneous
 
-- The file `saved-data.json` inside the data folder contains a list of saved information. **DO NOT ALTER THIS FILE! DOING SO CAN CORRUPT THE BOT!**
+- The file `saved-data.json` inside the data folder contains a list of saved information. **DO NOT ALTER THIS FILE! DOING SO CAN CORRUPT THE BOT! AND DEFINITIVELY NEVER CHANGE THE FILE WHILE THE BOT IS ON!**
 - The `dictionary.txt` contains all the possible word for the Hangman that the bot chooses from random. I found a random text file of all the words online from [here](https://github.com/hugsy/stuff/blob/main/random-word/english-nouns.txt). However, you are welcome to replace it with words of your choice. 
 
 ## Versions
 
-#### Version 1.0.0:
+#### Version 1.0.0 (Released December 15, 2021)
 - Official release: This repository is made public. 
 
 ## Frequently Asked Questions
+
+**Question: I can't turn on my bot, I am stuck on an instruction, etc.**
+
+**Answer:** Check out the CONTACT ME part of the README further below and ask! Please tell me what steps you are doing, and or what your terminal says to make me try to figure out the problem without too much trouble!
 
 **Question: I want to change a certain minor features of the bot (like changing the number of lives in Hangman to 3 lives instead of 6). How do I do that?**
 
@@ -152,7 +160,7 @@ Possible words will be stored in the dictionary.txt file. Each line in the text 
 6. So line 19 should become `let psCommand = Add-Type -AssemblyName System.speech;$speak = New-Object System.Speech.Synthesis.SpeechSynthesizer; [Console]::InputEncoding = [System.Text.Encoding]::UTF8;`
 7. Save the file and re-open the bot.
 
-Unfortunately, this fix does not support non-Latin letter languages like Chinese, Russian, etc.
+Unfortunately, this fix does not support non-Latin letter languages like Chinese, Japanese, Arabic, Russian, etc.
 
 **Question: I see many other features on your Twitch Bot when you stream that do not exist here. Where are those?**
 
@@ -161,6 +169,10 @@ Unfortunately, this fix does not support non-Latin letter languages like Chinese
 **Question: I am trying to cheat... I mean get help when you start a Hangman game, but the dictionary.txt file does not have that word. Where am I getting my words on my stream?**
 
 **Answer:** It's a secret to everybody! I simply found a random text file of words online to act as a sample dictionary.txt file for my example. The real word file will most likely never be revealed.
+
+**Question: I only want one feature (e.g. I only want Hangman no TTS!) Is there a way to delete the part I don't want and only have what I want?**
+
+**Answer:** Unfortunately, as of right now, you will just have to type `!off` every time you start the bot to turn off TTS, or never have you or your mods type `!start` to start Hangman games. `!lurk` isn't something I can turn off right now unless you are proficiently in the code and manually delete the correct code. I will definitely be working on something in the future where you can save settings on whether to turn on or off TTS, Hangman, or lurking. 
 
 ## Future Plans
 
@@ -173,6 +185,7 @@ This is a list of things I hope to implement on my Twitch Bot in the future. I d
 5. Log file for TTS.
 6. Hangman and TTS integration.
 7. TTS/Hangman other languages support.
+8. JSON file with settings saved. 
 
 ## Contact Me
 
