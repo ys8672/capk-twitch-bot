@@ -54,7 +54,7 @@ client.on("subscription", (channel, username, methods, message, userstate) => {
 		msg += ` with a ${tierList[plan]} sub! `;
 	}
 	if(message) msg += `${message}`;
-    addTTS(msg);
+    addTTS(msg, 1.0);
 });
 
 /*
@@ -77,7 +77,7 @@ client.on('resub', (channel, username, months, message, userstate, methods) => {
 		msg += ` with a ${tierList[plan]} sub! `;
 	}
 	if(message) msg += `${message}`;
-    addTTS(msg);
+    addTTS(msg, 1.0);
 });
 
 /*
@@ -95,7 +95,7 @@ client.on("cheer", (channel, userstate, message) => {
 		msg += ` bits! `;
 	}
 	if(message) msg += `${message}`;
-	addTTS(msg);
+	addTTS(msg, 1.0);
 });
 
 /*
@@ -107,7 +107,7 @@ client.on("cheer", (channel, userstate, message) => {
  */
 client.on("raided", (channel, username, viewers) => {
 	let msg = `${username} is raiding with ${viewers} viewers!`;
-	addTTS(msg);
+	addTTS(msg, 1.0);
 });
 
 /*
@@ -125,7 +125,7 @@ client.on("subgift", (channel, username, months, recipient, methods, userstate) 
 	let msg = `${username} gifted a ${tierList[plan]} sub to ${recipient}! `;
 	if(months !== 0) 
 		msg += `${recipient} resubscribed for ${months} months!`;
-	addTTS(msg);
+	addTTS(msg, 1.0);
 });
 
 /*
@@ -139,7 +139,7 @@ client.on("subgift", (channel, username, months, recipient, methods, userstate) 
  */
 client.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) => {
 	let msg = `${username} has just gifted the channel ${numbOfSubs} gift subscriptions!`;
-	addTTS(msg);
+	addTTS(msg, 1.0);
 });
 
 /*
@@ -152,7 +152,7 @@ client.on("submysterygift", (channel, username, numbOfSubs, methods, userstate) 
  */
 client.on("giftpaidupgrade", (channel, username, sender, userstate) => {
     let msg = `${username} is continuing their gift sub from ${sender}! `;
-	addTTS(msg);
+	addTTS(msg, 1.0);
 });
 
 /*
@@ -164,7 +164,7 @@ client.on("giftpaidupgrade", (channel, username, sender, userstate) => {
  */
 client.on("anongiftpaidupgrade", (channel, username, userstate) => {
     let msg = `${username} is continuing their gift sub from an anonymous patron! `;
-	addTTS(msg);
+	addTTS(msg, 1.0);
 });
 
 /*
@@ -172,7 +172,7 @@ client.on("anongiftpaidupgrade", (channel, username, userstate) => {
  */
 client.on('connected', (address, port) => {
 	// Test to make sure TTS is working.
-	addTTS(`Text to speech is working!`);
+	addTTS(`Text to speech is working!`, 1.0);
 	
 	// Dictionary add to list
 	hangman.loadDictionary();
@@ -182,13 +182,13 @@ client.on('connected', (address, port) => {
 		let content = fs.readFileSync(dataPath, 'utf-8');
 		try {
 			updateSavedData(JSON.parse(content));
-			addTTS(`Previously save data loaded successfully.`);
+			addTTS(`Previously save data loaded successfully.`, 1.0);
 		} catch (e) {
-			addTTS(`The previously saved data cannot be loaded.`);
+			addTTS(`The previously saved data cannot be loaded.`, 1.0);
 		}
 	}
 	else{
-		addTTS(`There is no previous save data.`);
+		addTTS(`There is no previous save data.`, 1.0);
 	}
 });
 
@@ -243,6 +243,8 @@ client.on('chat', (channel, user, message, self) => {
 		[commands.START]: () => hangman.start(hangmanProps),
 		[commands.STATS]: () => hangman.stats(hangmanProps),
 		[commands.TTS]: () => tts({ ...ttsProps, message, name }),
+		[commands.TTSFAST]: () => tts({ ...ttsProps, message, name }),
+		[commands.TTSSLOW]: () => tts({ ...ttsProps, message, name }),
 		[commands.UNBAN]: () => unbanUserFromTTS(banProps),
 	};
 
@@ -264,7 +266,7 @@ client.on('chat', (channel, user, message, self) => {
 			command = '!guessword';
 			break;
 		case (isTTS(message)):
-			command = '!tts';
+			command = message.split(" ")[0];
 			break;
 		default:
 			command = message;
