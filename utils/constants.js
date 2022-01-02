@@ -12,5 +12,7 @@ exports.commands = {
     START: '!start',
     STATS: '!stats',
     TTS: '!tts',
+    TTSFAST: '!ttsfast',
+    TTSSLOW: '!ttsslow',
     UNBAN: '!unban'
 };

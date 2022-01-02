@@ -4,16 +4,15 @@ const { isBroadcasterOrMod, isSubOrVIP } = require('../utils/index');
 const { getSavedData } = require('../data/index');
 
 // TEXT-TO-SPEECH VARIABLES
-/* Speed the text-to-speech reads the message. 1.0 is normal, 0.5 is half
-	speed, and 2.0 is 2x speed. */
-const ttsSpeed = 1.0;
+
 /* Sub tier mapped from tmi API response to normal English words.*/
 const tierList = { "1000": "Tier 1", "2000": "Tier 2", "3000": "Tier 3" };
 
 /* TEXT-TO-SPEECH is on or off. */
 let ttsOn = true;
 
-const isTTS = (message) => message.startsWith("!tts") && message.split(" ")[0] === "!tts";
+const isTTS = (message) => message.startsWith("!tts") && 
+    (message.split(" ")[0] === "!tts" || message.split(" ")[0] === "!ttsslow" || message.split(" ")[0] === "!ttsfast");
 
 /**
  * @param {Boolean} val
@@ -29,7 +28,8 @@ const ttsQueue = [];
  * all messages have been read out loud.
  */
 function ttsReader(){
-    say.speak(ttsQueue[0], null, ttsSpeed, (err) => {
+    const [message, speed] = ttsQueue[0]
+    say.speak(message, null, speed, () => {
         ttsQueue.shift()
         if(ttsQueue.length > 0){
             ttsReader();
@@ -41,8 +41,8 @@ function ttsReader(){
  * Adds a text in the text-to-speech queue for the bot to read.
  * @param {String} message
  */
-function addTTS(message){
-    ttsQueue.push(message);
+function addTTS(message, speed){
+    ttsQueue.push([message, speed]);
     if(ttsQueue.length === 1){
         ttsReader();
     }
@@ -127,15 +127,15 @@ function tts({ channel, client, message, name, user }){
     const messages = {
         banned: `@${name} You are banned from using TTS.`,
         instructions: [
-                `@${name} Add a message after typing the !tts command to have a text-to-speech reader read your message.`,
-                `Example: ${commands.TTS} Hello World!`
+                `@${name} Add a message after typing the ${message} command to have a text-to-speech reader read your message in a certain speed.`,
+                `Example: ${message} Hello World!`
             ].join(' '),
-        off: `@${name} Text to speech is off.`,
+        off: `@${name} TTS is off.`,
         subOrVip: `@${name} Only subs and VIPs can use TTS.`,
 
     };
 
-    if(message === "!tts"){
+    if(message === commands.TTS || message === commands.TTSFAST || message === commands.TTSSLOW){
         // No message, so instructions on how to use.
         client.say(channel, messages.instructions);
     } else if(!ttsOn) {
@@ -149,20 +149,15 @@ function tts({ channel, client, message, name, user }){
         client.say(channel, messages.subOrVip);
     } else {
         // Add the TTS to the queue.
-        const toSay = message.substr(message.indexOf(" ") + 1);
-
-        if(ttsQueue.length !== 0){
-            ttsQueue.push(`${name} says: ${toSay}`);
-        } else {
-            ttsQueue.push(`${name} says: ${toSay}`);
-            ttsReader();
-        }
+        const msg= `${name} says: ${message.substr(message.indexOf(" ") + 1)}`;
+        const speed = message.split(" ")[0] === commands.TTSFAST ? 1.5 : 
+            (message.split(" ")[0] === commands.TTSSLOW ? 0.75 : 1.0);
+        addTTS(msg, speed);
     }
 }
 
 
 module.exports = {
-    ttsSpeed,
     tierList,
     ttsOn,
     toggleTTS,
