@@ -2,6 +2,7 @@ const fs = require('fs');
 const { commands } = require('../utils/constants');
 const { isBroadcasterOrMod, setCharAt } = require('../utils/index');
 const { getSavedData, updateSavedData } = require('../data/index');
+const { addTTS } = require('../commands/tts')
 
 // HANGMAN VARIABLES
 /* String list of all the words the Hangman bot can choose from.
@@ -57,6 +58,7 @@ const start = ({ channel, client, user }) => {
 
             // Prints to console the random word selected so the broadcaster knows.
             console.log(`The word selected is: ${dictionaryWord}`);
+            addTTS(`A hang man game has started!`, 1.0);
             client.say(channel, `A Hangman game has started! Use "!guess <letter>" or "!guessword <word>" to play. Progress: ${word}.`);
             started = true;
         }
@@ -71,6 +73,7 @@ const start = ({ channel, client, user }) => {
 const end = ({ channel, client, user }) => {
     if(isBroadcasterOrMod(user) && started){
         started = false;
+        addTTS(`The hang man game has ended!`, 1.0);
         client.say(channel, `The Hangman game has ended.`);
     }
 };
@@ -128,8 +131,14 @@ const guessLetter = ({ channel, client, message, name }) => {
                 getSavedData().leaderboard[name] = (getSavedData().leaderboard[name]+1) || 1 ;
                 updateSavedData(getSavedData());
                 started = false;
+                addTTS(`Congratulations ${name}! The word is: ${dictionaryWord}!`, 1.0);
                 client.say(channel, `@${name} You win! Word is "${dictionaryWord}". ${getSavedData().wins}/${getSavedData().total} wins.`);
             } else {
+                if(times === 1) {
+                    addTTS(`1 ${charGuess}.`, 1.0);
+                } else {
+                    addTTS(`${times} ${charGuess}'s.`, 1.0);
+                }
                 //Correct, but more letters to be guessed.
                 client.say(channel, `@${name} ${times} "${charGuess}". Lives: ${lives}. Guessed: ${letterGuess.join(', ')}. Progress: ${word}.`);
             }
@@ -143,9 +152,11 @@ const guessLetter = ({ channel, client, message, name }) => {
                 getSavedData().total++;
                 updateSavedData(getSavedData());
                 started = false;
+                addTTS(`GAME OVER! The word is: ${dictionaryWord}!`, 1.0);
                 client.say(channel, `@${name} GAME OVER. No "${charGuess}". Guessed: ${letterGuess.join(', ')}. Final progress: ${word}. Actual Word: "${dictionaryWord}". ${getSavedData().wins}/${getSavedData().total} wins.`);
             } else {
                 // Incorrect, but there are still lives remaining.
+                addTTS(`No ${charGuess}.`, 1.0);
                 client.say(channel, `@${name} No "${charGuess}". Lives: ${lives}. Guessed: ${letterGuess.join(', ')}. Progress: ${word}.`);
             }
         }
@@ -176,6 +187,9 @@ const guessWord = ({ channel, client, message, name }) => {
         wordCooldown[name] = Date.now() + wordCooldownTime;
 
         let wordGuess = strArray[1].toUpperCase();
+        letterGuess.push(wordGuess);
+        letterGuess.sort();
+
         if(dictionaryWord === wordGuess){
             // Correct word guess, so game is recorded.
             getSavedData().wins++;
@@ -183,6 +197,7 @@ const guessWord = ({ channel, client, message, name }) => {
             getSavedData().leaderboard[name] = (getSavedData().leaderboard[name]+1) || 1 ;
             updateSavedData();
             started = false;
+            addTTS(`Congratulations ${name}! The word is: ${dictionaryWord}!`, 1.0);
             client.say(channel, `@${name} You win! Word is "${dictionaryWord}". ${getSavedData().wins}/${getSavedData().total} wins!`);
         } else {
             // Word guess was incorrect.
@@ -194,9 +209,11 @@ const guessWord = ({ channel, client, message, name }) => {
                 updateSavedData(getSavedData());
 
                 started = false;
+                addTTS(`GAME OVER! The word is: ${dictionaryWord}!`, 1.0);
                 client.say(channel, `@${name} GAME OVER. No "${wordGuess}". Guessed: ${letterGuess.join(', ')}. Final progress: ${word}. Actual word: "${dictionaryWord}". ${getSavedData().wins}/${getSavedData().total} wins`);
             } else {
                 // More lives, so game not over yet but incorrect word guess.
+                addTTS(`The word is not "${wordGuess}".`, 1.0);
                 client.say(channel, `@${name} No "${wordGuess}". Lives: ${lives}. Guessed: ${letterGuess.join(', ')}. Progress: ${word}.`);
             }
         }
