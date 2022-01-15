@@ -245,7 +245,7 @@ const leaderBoard = ({ channel, client }) => {
 };
 
 const loadDictionary = () => {
-    dictionary = fs.readFileSync('dictionary.txt').toString().split("\n");
+    dictionary = fs.readFileSync('data/dictionary.txt').toString().split("\n");
 };
 
 const stats = ({ channel, client, name }) => {
