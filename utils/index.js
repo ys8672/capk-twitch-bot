@@ -10,8 +10,7 @@ exports.client = new tmi.client(options);
  * @param user Object with all information about the user.
  */
 exports.isBroadcasterOrMod = (user) => {
-    return 'broadcaster' in user.badges
-        || 'moderator' in user.badges;
+    return user.badges && ('broadcaster' in user.badges || 'moderator' in user.badges);
 };
 
 /*
@@ -19,9 +18,9 @@ exports.isBroadcasterOrMod = (user) => {
  * @param user Object with all information about the user.
  */
 exports.isSubOrVIP = (user) => {
-    return 'subscriber' in user.badges
+    return user.badges && ('subscriber' in user.badges
         || 'founder' in user.badges
-        || 'vip' in user.badges;
+        || 'vip' in user.badges);
 };
 
 /*
